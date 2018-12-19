@@ -1,40 +1,28 @@
-let inter;
-const baseInfo = {};
+let id;
 
-const targetOrigin = '*';
-
-function operation(type, config, obj) {
-
-    if (typeof config !== 'object' || !obj.id) {
-        return;
-    }
-
-    top.postMessage(Object.assign({}, config, {
-        id: obj.id,
-        _operation_type: type
-    }));
+function execute(method, argv) {
+	top.postMessage({ id, method, argv }, '*');
 }
 
-const postMessageSDK = {
-    id: null,
-    resize(config) {
-        operation('resize', config, this)
-    },
-    set(config) {
-        operation('set', config, this)
-    },
-    close(config) {
-        operation('close', config, this)
-    }
-}
+window.addEventListener('message', function init(event) {
+	id = event.data.id;
+	execute('ready');
 
+	window._portal_sdk_ = {
+		resize(width, height) {
+			execute('resize', { width, height });
+		},
+		setTitle(title) {
+			execute('setTitle', { title });
+		},
+		close() {
+			execute('close');
+		}
+	};
 
-window.addEventListener('message', inter = (event) => {
-    postMessageSDK.id = event.data.id; //传对象或对象序列化的字符串
-    
-    top.postMessage('init successed', targetOrigin);
+	const readyEvent = document.createEvent('Event');
+	readyEvent.initEvent('sdk-ready', true, true);
+	window.dispatchEvent(readyEvent);
 
-    window.removeEventListener('message', inter);
+	window.removeEventListener('message', init);
 });
-
-window._portal_sdk_ = postMessageSDK;

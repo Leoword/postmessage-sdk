@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.addEventListener('sdk-ready', function () {
+            var sdk = window._portal_sdk_;
+            var closeBtn = document.getElementById('close');
+
+            sdk.resize(600, 600);
+
+            sdk.setTitle('这是一个示例');
+
+            closeBtn.addEventListener('click', function () {
+                sdk.close();
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>test</div>
+    <button id="close">关闭</button>
+</body>
+</html>
