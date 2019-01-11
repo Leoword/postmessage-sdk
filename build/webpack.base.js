@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'production',
@@ -21,5 +22,12 @@ module.exports = {
 			}
 		]
 	},
-	node: false
+	node: false,
+	plugins: [
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: path.resolve(__dirname, './template/index.html'),
+			inject: "head"
+		})
+	]
 };
